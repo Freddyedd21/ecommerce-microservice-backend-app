@@ -4,7 +4,7 @@ name: Develop, on PUSH Java CI/CD of api-gateway-ecommerce-boot, ecommerce-micro
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build_push:

@@ -3,7 +3,7 @@ name: Develop, on PUSH Java CI/CD of proxy-client-ecommerce-boot, ecommerce-micr
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build_push:

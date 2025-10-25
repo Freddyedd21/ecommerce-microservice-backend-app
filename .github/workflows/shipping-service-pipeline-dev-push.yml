@@ -3,7 +3,7 @@ name: Stage, on PUSH Java CI/CD of shipping-service-ecommerce-boot, ecommerce-mi
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build_push:

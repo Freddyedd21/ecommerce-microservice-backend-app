@@ -3,7 +3,7 @@ name: Prod, on PUSH Java CI/CD of favourite-service-ecommerce-boot, ecommerce-mi
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build_push:

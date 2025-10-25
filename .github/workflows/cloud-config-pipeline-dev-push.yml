@@ -3,7 +3,7 @@ name: Prod, on PUSH Java CI/CD of cloud-config-ecommerce-boot, ecommerce-microse
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build_push:
