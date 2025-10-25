@@ -1,3 +1,9 @@
+# Ignorar archivos y carpetas del runner y logs
+actions-runner/
+*.log
+# Ignorar carpetas temporales y de trabajo
+*_work/
+_diag/
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
