@@ -1,0 +1,133 @@
+[2025-10-25 20:32:47Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2025-10-25 20:32:47Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:47Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:47Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'Runner': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.runner'
+[2025-10-25 20:32:48Z INFO Listener] Runner is built for Windows (X64) - win-x64.
+[2025-10-25 20:32:48Z INFO Listener] RuntimeInformation: Microsoft Windows 10.0.22631.
+[2025-10-25 20:32:48Z INFO Listener] Version: 2.329.0
+[2025-10-25 20:32:48Z INFO Listener] Commit: c76c59996c8fa32e989164a5a695efb12608ae5a
+[2025-10-25 20:32:48Z INFO Listener] Culture: es-CO
+[2025-10-25 20:32:48Z INFO Listener] UI Culture: es-ES
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO Listener] Validating directory permissions for: 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO CommandLineParser] Parse
+[2025-10-25 20:32:48Z INFO CommandLineParser] Parsing 1 args
+[2025-10-25 20:32:48Z INFO CommandLineParser] parsing argument
+[2025-10-25 20:32:48Z INFO CommandLineParser] HasArgs: False
+[2025-10-25 20:32:48Z INFO CommandLineParser] Adding Command: run
+[2025-10-25 20:32:48Z INFO Listener] Arguments parsed
+[2025-10-25 20:32:48Z INFO Runner] ExecuteCommand
+[2025-10-25 20:32:48Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin\Runner.Listener.dll
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] binPath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] RootFolder: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'Runner': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.runner'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] ConfigFilePath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.runner
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.runner_migrated'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.runner_migrated
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] CredFilePath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_migrated'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_migrated
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'Service': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.service'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.service
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'help': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'version': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'commit': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'check': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Command 'configure': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Command 'remove': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Command 'warmup': 'False'
+[2025-10-25 20:32:48Z INFO ConfigurationManager] LoadSettings
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsConfigured()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsConfigured: True
+[2025-10-25 20:32:48Z INFO ConfigurationManager] Is configured: True
+[2025-10-25 20:32:48Z INFO ConfigurationStore] Read setting file: 421 chars
+[2025-10-25 20:32:48Z INFO ConfigurationManager] Settings Loaded
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsServiceConfigured()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsServiceConfigured: False
+[2025-10-25 20:32:48Z INFO CommandSettings] Command 'run': 'True'
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsConfigured()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsConfigured: True
+[2025-10-25 20:32:48Z INFO ConfigurationManager] Is configured: True
+[2025-10-25 20:32:48Z INFO Runner] Could not parse the argument value '' for StartupType. Defaulting to Manual
+[2025-10-25 20:32:48Z INFO Runner] Set runner startup type - Manual
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'once': 'False'
+[2025-10-25 20:32:48Z INFO CommandSettings] Flag 'once': 'False'
+[2025-10-25 20:32:48Z INFO Runner] RunAsync
+[2025-10-25 20:32:48Z INFO ConfigurationManager] LoadMigratedSettings
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsMigratedConfigured()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] IsMigratedConfigured: False
+[2025-10-25 20:32:48Z INFO Runner] Failed to load migrated settings: No migrated configuration found.
+[2025-10-25 20:32:48Z INFO Runner] Falling back to original .runner settings
+[2025-10-25 20:32:48Z INFO Runner] Using BrokerMessageListener
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] Using provided settings
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] {
+  "AgentId": 4,
+  "AgentName": "COMPUTECNICO",
+  "PoolId": 1,
+  "PoolName": "Default",
+  "ServerUrl": "https://pipelinesghubeus7.actions.githubusercontent.com/a3H7VYbqk9a1dymGvyIFKoNDqxcGkAkEneoPM4SywrIm1wKxAD/",
+  "GitHubUrl": "https://github.com/Freddyedd21/ecommerce-microservice-backend-app",
+  "WorkFolder": "_work",
+  "UseV2Flow": true,
+  "ServerUrlV2": "https://broker.actions.githubusercontent.com/"
+}
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] Loading Credentials
+[2025-10-25 20:32:48Z INFO ConfigurationStore] HasCredentials()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] stored True
+[2025-10-25 20:32:48Z INFO CredentialManager] GetCredentialProvider
+[2025-10-25 20:32:48Z INFO CredentialManager] Creating type OAuth
+[2025-10-25 20:32:48Z INFO CredentialManager] Creating credential type: OAuth
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Bin': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\bin'
+[2025-10-25 20:32:48Z INFO HostContext] Well known directory 'Root': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner'
+[2025-10-25 20:32:48Z INFO HostContext] Well known config file 'RSACredentials': 'C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_rsaparams'
+[2025-10-25 20:32:48Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_rsaparams
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] Attempt to create session.
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] Connecting to the Broker Server...
+[2025-10-25 20:32:48Z INFO ConfigurationStore] HasCredentials()
+[2025-10-25 20:32:48Z INFO ConfigurationStore] stored True
+[2025-10-25 20:32:48Z INFO CredentialManager] GetCredentialProvider
+[2025-10-25 20:32:48Z INFO CredentialManager] Creating type OAuth
+[2025-10-25 20:32:48Z INFO CredentialManager] Creating credential type: OAuth
+[2025-10-25 20:32:48Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_rsaparams
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] VssConnection created
+[2025-10-25 20:32:48Z INFO BrokerMessageListener] Connecting to the Runner server...
+[2025-10-25 20:32:48Z INFO RunnerServer] EstablishVssConnection
+[2025-10-25 20:32:48Z INFO RunnerServer] Establish connection with 100 seconds timeout.
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-10-25 20:32:49Z INFO RunnerServer] EstablishVssConnection
+[2025-10-25 20:32:49Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-10-25 20:32:49Z INFO RunnerServer] EstablishVssConnection
+[2025-10-25 20:32:49Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-10-25 20:32:49Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2025-10-25 20:32:50Z INFO BrokerMessageListener] VssConnection created
+[2025-10-25 20:32:50Z INFO Terminal] WRITE LINE: 
+[2025-10-25 20:32:50Z INFO Terminal] WRITE LINE: 
+[2025-10-25 20:32:50Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_rsaparams
+[2025-10-25 20:32:50Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\CTecn\Desktop\ecommerce-microservice-backend-app\actions-runner\.credentials_rsaparams
+[2025-10-25 20:32:50Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2025-10-25 20:32:50Z INFO BrokerMessageListener] Session created.
+[2025-10-25 20:32:50Z INFO Terminal] WRITE LINE: Current runner version: '2.329.0'
+[2025-10-25 20:32:50Z INFO Terminal] WRITE LINE: 2025-10-25 20:32:50Z: Listening for Jobs
+[2025-10-25 20:32:50Z INFO JobDispatcher] Set runner/worker IPC timeout to 30 seconds.
