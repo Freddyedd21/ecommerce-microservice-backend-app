@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 4,
+  "agentName": "COMPUTECNICO",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus7.actions.githubusercontent.com/a3H7VYbqk9a1dymGvyIFKoNDqxcGkAkEneoPM4SywrIm1wKxAD/",
+  "gitHubUrl": "https://github.com/Freddyedd21/ecommerce-microservice-backend-app",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}
