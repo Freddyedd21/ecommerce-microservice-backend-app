@@ -34,6 +34,9 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+      - name: Debug kubeconfig
+        run: |
+          cat $HOME/.kube/config
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/
