@@ -30,4 +30,12 @@ jobs:
     - name: Push product-service-ecommerce-boot image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/product-service-ecommerce-boot:${{ secrets.PROJECT_VERSION }}dev
 
+    - name: Set up kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/
+
 
