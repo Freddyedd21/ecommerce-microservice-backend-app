@@ -1,12 +1,24 @@
 
+
 version: '3'
 services:
   cloud-config-container:
     image: selimhorri/cloud-config-ecommerce-boot:0.1.0
     ports:
-      - 9296:9296
+      - "9296:9296"
+    networks:
+      - microservices_network
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411
+      - EUREKA_CLIENT_REGION=default
+      - EUREKA_CLIENT_AVAILABILITY_ZONES_DEFAULT=myzone
+      - EUREKA_CLIENT_SERVICEURL_MYZONE=http://service-discovery-container:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery-container:8761/eureka/
+
+networks:
+  microservices_network:
+    external: true
 
 
 
