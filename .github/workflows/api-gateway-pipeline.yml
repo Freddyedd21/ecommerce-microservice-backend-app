@@ -34,7 +34,7 @@ jobs:
         run: |
           git log -1 --pretty=format:"%h - %s (%an, %ad)" > release-notes.txt
       - name: Upload Release Notes
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-notes
           path: release-notes.txt
