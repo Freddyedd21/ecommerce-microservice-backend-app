@@ -38,6 +38,33 @@
 - Usar los workflows de GitHub Actions para automatizar el build y despliegue.
 - Usar los manifiestos de Kubernetes para el despliegue en clúster.
 
+## 6. Automatización CI/CD y Despliegue en Kubernetes
+
+### Workflows de GitHub Actions
+- Se crearon dos workflows principales en `.github/workflows/`:
+  - `core-services-pipeline.yml`: Despliega los servicios centrales (Zipkin, Cloud Config, Service Discovery) en el clúster de Kubernetes usando los manifiestos en `k8s/`.
+  - `api-gateway-pipeline.yml`: Compila, construye y publica la imagen Docker del API Gateway, y luego la despliega en Kubernetes.
+- El workflow de servicios centrales debe ejecutarse primero para asegurar que Zipkin, Eureka y Config Server estén disponibles antes de desplegar el API Gateway y los microservicios de negocio.
+- Ambos workflows usan un runner self-hosted y requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` para autenticación y acceso al clúster.
+
+### Manifiestos de Kubernetes
+- Los manifiestos para Zipkin, Cloud Config y Service Discovery se encuentran en la carpeta `k8s/`:
+  - `zipkin-deployment.yaml`
+  - `cloud-config-deployment.yaml`
+  - `service-discovery-deployment.yaml`
+- Cada manifiesto define un Deployment y un Service (NodePort) para exponer los servicios en el clúster.
+- El API Gateway también cuenta con sus propios manifiestos (`api-gateway-deployment.yaml`, `api-gateway-service.yaml`).
+
+### Orden de despliegue recomendado
+1. Ejecutar el workflow `core-services-pipeline.yml` para desplegar los servicios centrales.
+2. Verificar que los pods y servicios estén corriendo correctamente (`kubectl get pods`, `kubectl get services`).
+3. Ejecutar el workflow `api-gateway-pipeline.yml` para compilar, construir, publicar y desplegar el API Gateway.
+4. Validar el acceso al API Gateway y la integración con los servicios centrales.
+
+### Notas adicionales
+- Si se requiere que el workflow del API Gateway espere a que los servicios centrales estén listos, se puede configurar una dependencia entre workflows en GitHub Actions usando `needs` o ejecutando manualmente en el orden correcto.
+- Se recomienda documentar cualquier cambio en los manifiestos y workflows en este reporte para mantener trazabilidad.
+
 ---
 
 Este reporte documenta todos los pasos y configuraciones realizadas para correr y desplegar el sistema de microservicios de manera óptima y escalable.

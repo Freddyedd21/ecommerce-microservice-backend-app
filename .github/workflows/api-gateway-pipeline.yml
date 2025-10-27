@@ -1,7 +1,11 @@
 name: CI/CD - API Gateway
+# Este workflow se ejecuta automáticamente después de que el workflow de servicios core termine correctamente
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI/CD - Core Services"]
+    types:
+      - completed
     branches: [ dev, stage, master ]
   workflow_dispatch:
 
@@ -19,19 +23,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Run unit tests
-        run: mvn test
-      - name: Build Docker image
-        run: docker build -f api-gateway/Dockerfile -t freddyedd21/api-gateway-ecommerce-boot:${{ github.ref_name }} .
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      - name: Push Docker image
-        run: docker push freddyedd21/api-gateway-ecommerce-boot:${{ github.ref_name }}
+      # ...existing code...
+      # Usando imagen pública selimhorri/api-gateway-ecommerce-boot:0.1.0, no se requiere build ni push
       - name: Deploy to Minikube/Kubernetes
         run: |
-          kubectl apply -f k8s/ --validate=false
+          kubectl apply -f k8s/api-gateway-deployment.yaml --validate=false
+          kubectl apply -f k8s/api-gateway-service.yaml --validate=false
       - name: Generate Release Notes
         run: |
           git log -1 --pretty=format:"%h - %s (%an, %ad)" > release-notes.txt

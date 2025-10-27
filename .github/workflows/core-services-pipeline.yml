@@ -1,0 +1,22 @@
+name: CI/CD - Core Services
+
+on:
+  push:
+    branches: [ dev, stage, master ]
+  workflow_dispatch:
+
+jobs:
+  build_deploy_core:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy Zipkin
+        run: kubectl apply -f k8s/zipkin-deployment.yaml --validate=false
+      - name: Deploy Cloud Config
+        run: kubectl apply -f k8s/cloud-config-deployment.yaml --validate=false
+      - name: Deploy Service Discovery
+        run: kubectl apply -f k8s/service-discovery-deployment.yaml --validate=false
