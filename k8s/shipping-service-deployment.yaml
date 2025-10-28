@@ -28,8 +28,6 @@ spec:
               value: "http://cloud-config-service:9296"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://service-discovery-service:8761/eureka/"
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
-              value: "http://service-discovery-service:8761/eureka/"
             - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
               value: "true"
             - name: EUREKA_CLIENT_FETCH_REGISTRY

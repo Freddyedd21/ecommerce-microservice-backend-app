@@ -47,6 +47,14 @@
 - El workflow de servicios centrales debe ejecutarse primero para asegurar que Zipkin, Eureka y Config Server estén disponibles antes de desplegar el API Gateway y los microservicios de negocio.
 - Ambos workflows usan un runner self-hosted y requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` para autenticación y acceso al clúster.
 
+![1761673447373](image/REPORTE/1761673447373.png)
+
+![1761673515739](image/REPORTE/1761673515739.png)
+
+![1761673532742](image/REPORTE/1761673532742.png)
+
+![1761673788175](image/REPORTE/1761673788175.png)
+
 ### Manifiestos de Kubernetes
 - Los manifiestos para Zipkin, Cloud Config y Service Discovery se encuentran en la carpeta `k8s/`:
   - `zipkin-deployment.yaml`
@@ -60,6 +68,8 @@
 2. Verificar que los pods y servicios estén corriendo correctamente (`kubectl get pods`, `kubectl get services`).
 3. Ejecutar el workflow `api-gateway-pipeline.yml` para compilar, construir, publicar y desplegar el API Gateway.
 4. Validar el acceso al API Gateway y la integración con los servicios centrales.
+
+![1761673829556](image/REPORTE/1761673829556.png)
 
 ### Notas adicionales
 - Si se requiere que el workflow del API Gateway espere a que los servicios centrales estén listos, se puede configurar una dependencia entre workflows en GitHub Actions usando `needs` o ejecutando manualmente en el orden correcto.
