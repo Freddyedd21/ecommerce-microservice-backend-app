@@ -17,3 +17,12 @@ spec:
         image: selimhorri/api-gateway-ecommerce-boot:0.1.0
         ports:
         - containerPort: 8080
+        env:
+          - name: SPRING_CONFIG_IMPORT
+            value: "optional:configserver:http://cloud-config-service:9296/"
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://cloud-config-service:9296"
+          - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+            value: "http://service-discovery-service:8761/eureka/"
+          - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+            value: "http://service-discovery-service:8761/eureka/"

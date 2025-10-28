@@ -21,15 +21,15 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "dev"
             - name: SPRING_ZIPKIN_BASE_URL
-              value: "http://zipkin:9411"
+              value: "http://zipkin-service:9411"
             - name: SPRING_CONFIG_IMPORT
-              value: "optional:configserver:http://cloud-config-container:9296/"
+              value: "optional:configserver:http://cloud-config-service:9296/"
             - name: SPRING_CLOUD_CONFIG_URI
-              value: "http://cloud-config-container:9296"
+              value: "http://cloud-config-service:9296"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              value: "http://service-discovery-container:8761/eureka/"
+              value: "http://service-discovery-service:8761/eureka/"
             - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
-              value: "http://service-discovery-container:8761/eureka/"
+              value: "http://service-discovery-service:8761/eureka/"
             - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
               value: "true"
             - name: EUREKA_CLIENT_FETCH_REGISTRY

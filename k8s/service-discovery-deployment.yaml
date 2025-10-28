@@ -13,10 +13,22 @@ spec:
         app: service-discovery
     spec:
       containers:
-      - name: service-discovery
-        image: selimhorri/service-discovery-ecommerce-boot:0.1.0
-        ports:
-        - containerPort: 8761
+        - name: service-discovery
+          image: selimhorri/service-discovery-ecommerce-boot:0.1.0
+          ports:
+            - containerPort: 8761
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+            - name: SPRING_ZIPKIN_BASE_URL
+              value: "http://zipkin-service:9411"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
