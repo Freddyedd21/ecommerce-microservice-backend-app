@@ -54,3 +54,4 @@ spec:
     - protocol: TCP
       port: 8400
       targetPort: 8400
+  type: NodePort

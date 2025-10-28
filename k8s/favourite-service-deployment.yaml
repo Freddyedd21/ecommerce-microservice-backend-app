@@ -59,3 +59,4 @@ spec:
     - protocol: TCP
       port: 8800
       targetPort: 8800
+  type: NodePort
