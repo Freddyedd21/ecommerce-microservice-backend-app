@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zipkin
+  namespace: ecommerce
 spec:
   replicas: 1
   selector:
@@ -17,11 +18,19 @@ spec:
         image: openzipkin/zipkin:latest
         ports:
         - containerPort: 9411
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: zipkin-service
+  namespace: ecommerce
 spec:
   selector:
     app: zipkin

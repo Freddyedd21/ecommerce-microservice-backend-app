@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloud-config
+  namespace: ecommerce
 spec:
   replicas: 1
   selector:
@@ -13,31 +14,38 @@ spec:
         app: cloud-config
     spec:
       containers:
-        - name: cloud-config
-          image: selimhorri/cloud-config-ecommerce-boot:0.1.0
-          ports:
-            - containerPort: 9296
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "dev"
-            - name: SPRING_ZIPKIN_BASE_URL
-              value: "http://zipkin-service:9411"
-            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              value: "http://service-discovery-service:8761/eureka/"
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
-              value: "http://service-discovery-service:8761/eureka/"
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
+      - name: cloud-config
+        image: selimhorri/cloud-config-ecommerce-boot:0.1.0
+        ports:
+        - containerPort: 9296
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "dev"
+        - name: SPRING_ZIPKIN_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: zipkin-config
+              key: ZIPKIN_BASE_URL
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: cloud-config-service
+  namespace: ecommerce
 spec:
   selector:
     app: cloud-config

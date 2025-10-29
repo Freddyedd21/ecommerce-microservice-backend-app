@@ -17,6 +17,10 @@ jobs:
       - name: Set up KUBECONFIG
         run: |
           $env:KUBECONFIG = "${{ secrets.KUBECONFIG }}"
+      - name: Apply Namespace
+        run: kubectl apply -f k8s/namespace.yaml --validate=false
+      - name: Apply Config Maps
+        run: kubectl apply -f k8s/config-maps.yaml --validate=false
       - name: Deploy Product Service
         run: kubectl apply -f k8s/product-service-deployment.yaml --validate=false
       - name: Deploy User Service

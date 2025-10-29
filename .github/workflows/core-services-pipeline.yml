@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Apply Namespace
+        run: kubectl apply -f k8s/namespace.yaml --validate=false
+      - name: Apply Config Maps
+        run: kubectl apply -f k8s/config-maps.yaml --validate=false
       - name: Deploy Zipkin
         run: kubectl apply -f k8s/zipkin-deployment.yaml --validate=false
       - name: Deploy Cloud Config

@@ -25,10 +25,14 @@ jobs:
           distribution: 'adopt'
       # ...existing code...
       # Usando imagen pública selimhorri/api-gateway-ecommerce-boot:0.1.0, no se requiere build ni push
-      - name: Deploy to Minikube/Kubernetes
-        run: |
-          kubectl apply -f k8s/api-gateway-deployment.yaml --validate=false
-          kubectl apply -f k8s/api-gateway-service.yaml --validate=false
+      - name: Apply Namespace
+        run: kubectl apply -f k8s/namespace.yaml --validate=false
+      - name: Apply Config Maps
+        run: kubectl apply -f k8s/config-maps.yaml --validate=false
+      - name: Deploy API Gateway
+        run: kubectl apply -f k8s/api-gateway-deployment.yaml --validate=false
+      - name: Deploy API Gateway Service
+        run: kubectl apply -f k8s/api-gateway-service.yaml --validate=false
       - name: Generate Release Notes
         run: |
           git log -1 --pretty=format:"%h - %s (%an, %ad)" > release-notes.txt
