@@ -1,7 +1,10 @@
 name: CI/CD - Business Services
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI/CD - Core Services"]
+    types:
+      - completed
     branches: [ dev, stage, master ]
   workflow_dispatch:
 

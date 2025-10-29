@@ -7,6 +7,8 @@ on:
     types:
       - completed
     branches: [ dev, stage, master ]
+  push:
+    branches: [ dev, stage, master ]
   workflow_dispatch:
 
 jobs:
