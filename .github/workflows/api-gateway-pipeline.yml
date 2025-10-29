@@ -1,15 +1,13 @@
 name: CI/CD - API Gateway
-# Este workflow se ejecuta automáticamente después de que el workflow de servicios core termine correctamente
 
 on:
+  push:
+    branches: [ dev, stage, master ]
+  workflow_dispatch:
   workflow_run:
     workflows: ["CI/CD - Core Services"]
     types:
       - completed
-    branches: [ dev, stage, master ]
-  push:
-    branches: [ dev, stage, master ]
-  workflow_dispatch:
 
 jobs:
   build_test_deploy:
@@ -25,7 +23,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      # ...existing code...
       # Usando imagen pública selimhorri/api-gateway-ecommerce-boot:0.1.0, no se requiere build ni push
       - name: Apply Namespace
         run: kubectl apply -f k8s/namespace.yaml --validate=false

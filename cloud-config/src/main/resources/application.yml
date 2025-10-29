@@ -11,7 +11,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/SelimHorri/cloud-config-server
+          uri: https://github.com/Freddyedd21/cloud-config-server
           clone-on-start: true
 
 resilience4j:
