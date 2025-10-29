@@ -52,4 +52,4 @@ spec:
     - protocol: TCP
       port: 8300
       targetPort: 8300
-  type: NodePort
+  type: ClusterIP
