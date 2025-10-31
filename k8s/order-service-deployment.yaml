@@ -33,10 +33,22 @@ spec:
             configMapKeyRef:
               name: eureka-config
               key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
         - name: SPRING_CONFIG_IMPORT
-          value: "optional:configserver:http://cloud-config:9296/"
+          value: "optional:configserver:http://cloud-config-service:9296/"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://cloud-config-service:9296"
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
-          value: "false"
+          value: "true"
         - name: EUREKA_INSTANCE_HOSTNAME
           value: "order-service"
         - name: EUREKA_CLIENT_ENABLED

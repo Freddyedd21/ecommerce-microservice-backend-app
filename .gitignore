@@ -4,6 +4,7 @@ actions-runner/
 # Ignorar carpetas temporales y de trabajo
 *_work/
 _diag/
+tmp/cloud-config-server/
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

@@ -35,6 +35,16 @@ spec:
             configMapKeyRef:
               name: eureka-config
               key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
         - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
           value: "true"
         - name: EUREKA_CLIENT_FETCH_REGISTRY

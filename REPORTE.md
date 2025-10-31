@@ -12,6 +12,8 @@
 
 ![1761369714268](image/REPORTE/1761369714268.png)
 
+![1761872582002](image/REPORTE/1761872582002.png)
+
 ## 2. Docker y Compose
 - Se revisaron y adaptaron los Dockerfile de cada microservicio para asegurar consistencia y correcta configuración de variables de entorno.
 - Se corrigieron los compose.yml individuales para que todos los servicios se conecten a la red `microservices_network` y tengan las variables necesarias para Eureka, Config Server y Zipkin.
@@ -74,6 +76,13 @@
 ### Notas adicionales
 - Si se requiere que el workflow del API Gateway espere a que los servicios centrales estén listos, se puede configurar una dependencia entre workflows en GitHub Actions usando `needs` o ejecutando manualmente en el orden correcto.
 - Se recomienda documentar cualquier cambio en los manifiestos y workflows en este reporte para mantener trazabilidad.
+
+## 7. Ajustes recientes para despliegue en Minikube
+- Se corrigieron los valores de los ConfigMaps en `k8s/config-maps.yaml` para que `ZIPKIN_BASE_URL` apunte a `http://zipkin-service:9411` y `CONFIG_SERVER_URL` a `http://cloud-config-service:9296`, alineando los hosts con los nombres reales de los servicios dentro del clúster.
+- Se actualizaron los deployments `k8s/order-service-deployment.yaml`, `k8s/payment-service-deployment.yaml`, `k8s/product-service-deployment.yaml`, `k8s/shipping-service-deployment.yaml`, `k8s/user-service-deployment.yaml`, `k8s/cloud-config-deployment.yaml` y `k8s/zipkin-deployment.yaml` para que todos consuman el Config Server mediante `http://cloud-config-service:9296/` y lean la URL de Eureka desde el ConfigMap.
+- Para asegurar la detección del Config Server en Eureka, se añadieron variables de entorno alternativas (`EUREKA_CLIENT_SERVICE*_DEFAULTZONE`) y `JAVA_TOOL_OPTIONS=-Deureka.client.service-url.defaultZone=http://service-discovery-service:8761/eureka/` en los deployments de Cloud Config y Zipkin, evitando el fallback a `localhost` que usaba la configuración por defecto del repositorio Git de configuración.
+- Se eliminaron temporalmente los deployments de negocio (order, payment, product, shipping, user) para aislar las pruebas de los servicios core. Próximos despliegues deberán recrearlos cuando se continúe con las pruebas integrales.
+- Se agregó un controlador simple `RootController` en el proyecto `cloud-config` para responder con 200 en la raíz (`/`) y así evitar trazas de error 404 al monitorear con Zipkin. El contenedor en ejecución sigue usando la imagen publicada originalmente; solo es necesario reconstruirla si se quiere aprovechar este endpoint opcional.
 
 ---
 

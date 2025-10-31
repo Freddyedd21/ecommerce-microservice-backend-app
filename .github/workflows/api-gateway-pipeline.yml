@@ -32,6 +32,8 @@ jobs:
         run: kubectl apply -f k8s/api-gateway-deployment.yaml --validate=false
       - name: Deploy API Gateway Service
         run: kubectl apply -f k8s/api-gateway-service.yaml --validate=false
+      - name: Deploy Proxy Client
+        run: kubectl apply -f k8s/proxy-client-deployment.yaml --validate=false
       - name: Generate Release Notes
         run: |
           git log -1 --pretty=format:"%h - %s (%an, %ad)" > release-notes.txt

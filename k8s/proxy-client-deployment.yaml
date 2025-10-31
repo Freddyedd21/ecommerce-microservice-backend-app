@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: proxy-client
   namespace: ecommerce
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service
+      app: proxy-client
   template:
     metadata:
       labels:
-        app: user-service
+        app: proxy-client
     spec:
       containers:
-      - name: user-service
-        image: selimhorri/user-service-ecommerce-boot:0.1.0
+      - name: proxy-client
+        image: selimhorri/proxy-client-ecommerce-boot:0.1.0
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8700
+        - containerPort: 8900
           name: http
         env:
         - name: SPRING_PROFILES_ACTIVE
@@ -50,7 +50,7 @@ spec:
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "true"
         - name: EUREKA_INSTANCE_HOSTNAME
-          value: "user-service"
+          value: "proxy-client"
         - name: EUREKA_CLIENT_ENABLED
           value: "true"
         - name: EUREKA_CLIENT_FETCH_REGISTRY
@@ -64,19 +64,18 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-        
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service
+  name: proxy-client
   namespace: ecommerce
 spec:
   type: ClusterIP
   ports:
-  - port: 8700
-    targetPort: 8700
+  - port: 8900
+    targetPort: 8900
     protocol: TCP
     name: http
   selector:
-    app: user-service
+    app: proxy-client
