@@ -84,6 +84,23 @@
 - Se eliminaron temporalmente los deployments de negocio (order, payment, product, shipping, user) para aislar las pruebas de los servicios core. Próximos despliegues deberán recrearlos cuando se continúe con las pruebas integrales.
 - Se agregó un controlador simple `RootController` en el proyecto `cloud-config` para responder con 200 en la raíz (`/`) y así evitar trazas de error 404 al monitorear con Zipkin. El contenedor en ejecución sigue usando la imagen publicada originalmente; solo es necesario reconstruirla si se quiere aprovechar este endpoint opcional.
 
+
 ---
+
+![1761885010813](image/REPORTE/1761885010813.png)
+
+![1761885057490](image/REPORTE/1761885057490.png)
+
+
+![1762047836686](image/REPORTE/1762047836686.png)
+
+
+## 8. Cobertura de pruebas unitarias en microservicios
+- Se crearon suites unitarias con Mockito para los servicios de negocio que aparecen en Zipkin (`favourite-service`, `user-service`, `product-service`, `order-service`, `shipping-service`, `payment-service`). Cada prueba valida el mapeo DTO ↔ entidad, la interacción con los repositorios JPA y la integración con `RestTemplate` cuando aplica.
+- Durante la implementación se detectó que las entidades y DTOs no exponen `toBuilder`; por lo tanto, las pruebas construyen instancias actualizadas explícitamente para mantener compatibilidad con Lombok y reflejar estados modificados.
+- Se documentó el flujo completo de persistencia y eliminación en los servicios, incluyendo las excepciones personalizadas (`FavouriteNotFoundException`, `UserObjectNotFoundException`, etc.) para cubrir escenarios felices y de error.
+- Se ejecutaron los tests con `.\mvnw.cmd -pl favourite-service,user-service,product-service,order-service,shipping-service,payment-service test`, garantizando que todas las suites compilan y pasan en cadena dentro del reactor Maven.
+- La evidencia del `BUILD SUCCESS` se adjunta en la captura proporcionada, donde se observa el tiempo individual de ejecución por módulo y la ausencia de fallos.
+
 
 Este reporte documenta todos los pasos y configuraciones realizadas para correr y desplegar el sistema de microservicios de manera óptima y escalable.
