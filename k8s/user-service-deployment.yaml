@@ -21,6 +21,8 @@ spec:
         - containerPort: 8700
           name: http
         env:
+        - name: SPRING_CLOUD_CONFIG_NAME
+          value: "user-service"
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
         - name: SPRING_ZIPKIN_BASE_URL

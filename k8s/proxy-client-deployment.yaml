@@ -13,6 +13,19 @@ spec:
       labels:
         app: proxy-client
     spec:
+      initContainers:
+      - name: wait-for-config
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - 'until nc -z cloud-config-service 9296; do echo "waiting for cloud-config"; sleep 3; done'
+      - name: wait-for-eureka
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - 'until nc -z service-discovery-service 8761; do echo "waiting for service-discovery"; sleep 3; done'
       containers:
       - name: proxy-client
         image: selimhorri/proxy-client-ecommerce-boot:0.1.0
@@ -21,6 +34,10 @@ spec:
         - containerPort: 8900
           name: http
         env:
+        - name: SPRING_CLOUD_CONFIG_NAME
+          value: "PROXY-CLIENT"
+        - name: SPRING_APPLICATION_NAME
+          value: "PROXY-CLIENT"
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
         - name: SPRING_ZIPKIN_BASE_URL
@@ -57,6 +74,16 @@ spec:
           value: "true"
         - name: RIBBON_EUREKA_ENABLED
           value: "true"
+        - name: SPRING_CLOUD_CONFIG_FAILFAST
+          value: "true"
+        - name: SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS
+          value: "12"
+        - name: SPRING_CLOUD_CONFIG_RETRY_INITIAL_INTERVAL
+          value: "2000"
+        - name: SPRING_CLOUD_CONFIG_RETRY_MULTIPLIER
+          value: "1.5"
+        - name: SPRING_CLOUD_CONFIG_RETRY_MAX_INTERVAL
+          value: "10000"
         resources:
           requests:
             memory: "128Mi"
