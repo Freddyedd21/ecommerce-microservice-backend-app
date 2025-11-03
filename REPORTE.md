@@ -104,3 +104,62 @@
 
 
 Este reporte documenta todos los pasos y configuraciones realizadas para correr y desplegar el sistema de microservicios de manera óptima y escalable.
+
+## 9. Validación manual servicio por servicio en Minikube
+
+Para comprobar rápidamente la salud de cada componente dentro del clúster, se recomienda mantener abiertos los `port-forward` en sesiones independientes y validar con `curl`. Las combinaciones sugeridas evitan conflictos de puertos en la máquina local:
+
+- **Zipkin**  
+  - `kubectl port-forward deployment/zipkin -n ecommerce 19411:9411`
+  - `curl http://127.0.0.1:19411/actuator/health`
+  - `curl http://127.0.0.1:19411/api/v2/services`
+- **Service Discovery (Eureka)**  
+  - `kubectl port-forward deployment/service-discovery -n ecommerce 18761:8761`
+  - `curl http://127.0.0.1:18761/actuator/health`
+  - `curl http://127.0.0.1:18761/eureka/apps`
+- **Cloud Config**  
+  - `kubectl port-forward deployment/cloud-config -n ecommerce 19296:9296`
+  - `curl http://127.0.0.1:19296/actuator/health`
+  - `curl http://127.0.0.1:19296/user-service/dev`
+- **User Service**  
+  - `kubectl port-forward deployment/user-service -n ecommerce 18700:8700`
+  - `curl http://127.0.0.1:18700/user-service/actuator/health`
+  - `curl http://127.0.0.1:18700/user-service/api/users`
+- **Product Service**  
+  - `kubectl port-forward deployment/product-service -n ecommerce 18500:8500`
+  - `curl http://127.0.0.1:18500/product-service/actuator/health`
+  - `curl http://127.0.0.1:18500/product-service/api/products`
+- **Favourite Service**  
+  - `kubectl port-forward deployment/favourite-service-deployment -n ecommerce 18800:8800`
+  - `curl http://127.0.0.1:18800/favourite-service/actuator/health`
+  - `curl http://127.0.0.1:18800/favourite-service/api/favourites`
+- **Order Service**  
+  - `kubectl port-forward deployment/order-service -n ecommerce 18300:8300`
+  - `curl http://127.0.0.1:18300/order-service/actuator/health`
+  - `curl http://127.0.0.1:18300/order-service/api/orders`
+- **Shipping Service**  
+  - `kubectl port-forward deployment/shipping-service -n ecommerce 18600:8600`
+  - `curl http://127.0.0.1:18600/shipping-service/actuator/health`
+  - `curl http://127.0.0.1:18600/shipping-service/api/shippings`
+- **Payment Service**  
+  - `kubectl port-forward deployment/payment-service -n ecommerce 18400:8400`
+  - `curl http://127.0.0.1:18400/payment-service/actuator/health`
+  - `curl http://127.0.0.1:18400/payment-service/api/payments`
+
+Mantener estos túneles activos permite lanzar rápidamente diagnósticos tipo `curl` o ejecutar la prueba de integración global sin sufrir timeouts por dependencias no accesibles.
+
+## 10. Perfil Maven `integration` para pruebas Minikube
+
+Se actualizó el `pom.xml` raíz con dos cambios importantes:
+
+- El plugin `maven-surefire-plugin` excluye por defecto `MinikubeServiceCommunicationTest` de la fase `test`, de modo que `mvn test` o los builds estándar sigan ejecutándose rápido solo con los tests unitarios.
+- Se creó el perfil `integration` que activa el plugin `maven-failsafe-plugin` para ejecutar `MinikubeServiceCommunicationTest` en la fase `integration-test/verify`.
+- Ese plugin inyecta variables de entorno (`PRODUCT_SERVICE_BASE_URL`, `USER_SERVICE_BASE_URL`, etc.) apuntando a los puertos locales abiertos mediante `kubectl port-forward`, por lo que la prueba consume los túneles locales en lugar del DNS interno del clúster.
+
+Uso recomendado:
+
+```powershell
+mvn -Pintegration verify
+```
+
+Antes de lanzar el comando, asegurarse de tener vivos todos los `port-forward` listados en la sección anterior para evitar fallos de conectividad durante la prueba. El resultado se puede revisar en `target/surefire-reports/TEST-com.selimhorri.app.integration.MinikubeServiceCommunicationTest.xml` o directamente en la consola Maven.

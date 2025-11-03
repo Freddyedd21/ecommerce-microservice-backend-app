@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "11"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"cloud-config","namespace":"ecommerce"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"cloud-config"}},"template":{"metadata":{"labels":{"app":"cloud-config"}},"spec":{"containers":[{"env":[{"name":"SPRING_PROFILES_ACTIVE","value":"dev"},{"name":"SPRING_ZIPKIN_BASE_URL","valueFrom":{"configMapKeyRef":{"key":"ZIPKIN_BASE_URL","name":"zipkin-config"}}},{"name":"EUREKA_CLIENT_SERVICEURL_DEFAULTZONE","valueFrom":{"configMapKeyRef":{"key":"EUREKA_SERVER_URL","name":"eureka-config"}}},{"name":"EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE","valueFrom":{"configMapKeyRef":{"key":"EUREKA_SERVER_URL","name":"eureka-config"}}},{"name":"EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE","valueFrom":{"configMapKeyRef":{"key":"EUREKA_SERVER_URL","name":"eureka-config"}}},{"name":"JAVA_TOOL_OPTIONS","value":"-Deureka.client.service-url.defaultZone=http://service-discovery-service:8761/eureka/"}],"image":"selimhorri/cloud-config-ecommerce-boot:0.1.0","name":"cloud-config","ports":[{"containerPort":9296}],"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}}]}}}}
+  creationTimestamp: "2025-10-31T01:00:33Z"
+  generation: 11
+  name: cloud-config
+  namespace: ecommerce
+  resourceVersion: "44822"
+  uid: 382a6784-ec5e-4aef-8cdf-c013ffe32199
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: cloud-config
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2025-11-01T17:24:32-05:00"
+      labels:
+        app: cloud-config
+    spec:
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev
+        - name: SPRING_ZIPKIN_BASE_URL
+          value: http://zipkin-service.ecommerce:9411/
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              key: EUREKA_SERVER_URL
+              name: eureka-config
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://service-discovery-service.ecommerce:8761/eureka
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          valueFrom:
+            configMapKeyRef:
+              key: EUREKA_SERVER_URL
+              name: eureka-config
+        - name: JAVA_TOOL_OPTIONS
+          value: -Deureka.client.service-url.defaultZone=http://service-discovery-service:8761/eureka/
+        - name: EUREKA_INSTANCE
+          value: service-discovery-service.ecommerce
+        image: selimhorri/cloud-config-ecommerce-boot:0.1.0
+        imagePullPolicy: IfNotPresent
+        name: cloud-config
+        ports:
+        - containerPort: 9296
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2025-11-03T14:12:00Z"
+    lastUpdateTime: "2025-11-03T14:12:00Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2025-10-31T01:00:33Z"
+    lastUpdateTime: "2025-11-03T18:03:26Z"
+    message: ReplicaSet "cloud-config-587cf4cb96" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 11
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

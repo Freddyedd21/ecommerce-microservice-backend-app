@@ -115,12 +115,66 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<excludes>
+						<exclude>**/MinikubeServiceCommunicationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 		<finalName>${project.artifactId}-v${project.version}</finalName>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.22.2</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+								<configuration>
+									<includes>
+										<include>**/MinikubeServiceCommunicationTest.java</include>
+									</includes>
+									<environmentVariables>
+										<PRODUCT_SERVICE_BASE_URL>http://127.0.0.1:18500/product-service</PRODUCT_SERVICE_BASE_URL>
+										<USER_SERVICE_BASE_URL>http://127.0.0.1:18700/user-service</USER_SERVICE_BASE_URL>
+										<ORDER_SERVICE_BASE_URL>http://127.0.0.1:18300/order-service</ORDER_SERVICE_BASE_URL>
+										<FAVOURITE_SERVICE_BASE_URL>http://127.0.0.1:18800/favourite-service</FAVOURITE_SERVICE_BASE_URL>
+										<SHIPPING_SERVICE_BASE_URL>http://127.0.0.1:18600/shipping-service</SHIPPING_SERVICE_BASE_URL>
+										<PAYMENT_SERVICE_BASE_URL>http://127.0.0.1:18400/payment-service</PAYMENT_SERVICE_BASE_URL>
+									</environmentVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.2</version>
+						<configuration combine.self="override">
+							<excludes />
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	
 </project>
 
