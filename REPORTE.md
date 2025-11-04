@@ -46,6 +46,8 @@
 - Se crearon dos workflows principales en `.github/workflows/`:
   - `core-services-pipeline.yml`: Despliega los servicios centrales (Zipkin, Cloud Config, Service Discovery) en el clúster de Kubernetes usando los manifiestos en `k8s/`.
   - `api-gateway-pipeline.yml`: Compila, construye y publica la imagen Docker del API Gateway, y luego la despliega en Kubernetes.
+- Ambos workflows se dejaron ahora solo para ejecución manual (`workflow_dispatch`) para evitar redeploys accidentales al hacer `git push`. El pipeline del gateway sigue encadenado al de core mediante `workflow_run` para conservar el orden cuando se lanzan manualmente.
+- El workflow de core despliega ahora en el orden Zipkin → Cloud Config → Service Discovery y espera a que cada `Deployment` quede listo con `kubectl rollout status` antes de avanzar. De este modo Eureka arranca una vez que el Config Server ya expone la configuración. El pipeline del gateway verifica a su vez que Eureka y Config Server estén sanos y espera la propagación de API Gateway y Proxy Client para cerrar el job con el clúster estable.
 - El workflow de servicios centrales debe ejecutarse primero para asegurar que Zipkin, Eureka y Config Server estén disponibles antes de desplegar el API Gateway y los microservicios de negocio.
 - Ambos workflows usan un runner self-hosted y requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` para autenticación y acceso al clúster.
 
@@ -155,6 +157,7 @@ Se actualizó el `pom.xml` raíz con dos cambios importantes:
 - El plugin `maven-surefire-plugin` excluye por defecto `MinikubeServiceCommunicationTest` de la fase `test`, de modo que `mvn test` o los builds estándar sigan ejecutándose rápido solo con los tests unitarios.
 - Se creó el perfil `integration` que activa el plugin `maven-failsafe-plugin` para ejecutar `MinikubeServiceCommunicationTest` en la fase `integration-test/verify`.
 - Ese plugin inyecta variables de entorno (`PRODUCT_SERVICE_BASE_URL`, `USER_SERVICE_BASE_URL`, etc.) apuntando a los puertos locales abiertos mediante `kubectl port-forward`, por lo que la prueba consume los túneles locales en lugar del DNS interno del clúster.
+ - Ese plugin inyecta variables de entorno (`PRODUCT_SERVICE_BASE_URL`, `USER_SERVICE_BASE_URL`, etc.) apuntando a los puertos locales abiertos mediante `kubectl port-forward`, por lo que la prueba consume los túneles locales en lugar del DNS interno del clúster.
 
 Uso recomendado:
 
@@ -163,3 +166,11 @@ mvn -Pintegration verify
 ```
 
 Antes de lanzar el comando, asegurarse de tener vivos todos los `port-forward` listados en la sección anterior para evitar fallos de conectividad durante la prueba. El resultado se puede revisar en `target/surefire-reports/TEST-com.selimhorri.app.integration.MinikubeServiceCommunicationTest.xml` o directamente en la consola Maven.
+
+![1762208725906](image/REPORTE/1762208725906.png)
+
+## 11. Nuevas pruebas E2E orientadas al flujo de usuario
+
+- Se añadió el archivo `src/test/java/com/selimhorri/app/e2e/UserJourneyE2ETest.java` con cinco casos que validan escenarios de usuario extremo a extremo a través del API Gateway (catálogo de productos, detalle, favoritos enriquecidos, resumen de envíos y estado de pagos).
+- Para ejecutarlas es necesario abrir un túnel adicional hacia el gateway: `kubectl port-forward deployment/api-gateway -n ecommerce 18080:8080`. El plugin Failsafe expone esta URL a los tests mediante `API_GATEWAY_BASE_URL`.
+- Las pruebas se ejecutan junto con la suite de integración existente utilizando el mismo comando `mvn -Pintegration verify`. El reporte consolidado queda disponible en `target/failsafe-reports/`.

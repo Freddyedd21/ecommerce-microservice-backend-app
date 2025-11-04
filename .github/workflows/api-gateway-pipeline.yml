@@ -1,13 +1,7 @@
 name: CI/CD - API Gateway
 
 on:
-  push:
-    branches: [ dev, stage, master ]
   workflow_dispatch:
-  workflow_run:
-    workflows: ["CI/CD - Core Services"]
-    types:
-      - completed
 
 jobs:
   build_test_deploy:
@@ -28,12 +22,20 @@ jobs:
         run: kubectl apply -f k8s/namespace.yaml --validate=false
       - name: Apply Config Maps
         run: kubectl apply -f k8s/config-maps.yaml --validate=false
+      - name: Wait for Service Discovery
+        run: kubectl rollout status deployment/service-discovery -n ecommerce --timeout=180s
+      - name: Wait for Cloud Config
+        run: kubectl rollout status deployment/cloud-config -n ecommerce --timeout=300s
       - name: Deploy API Gateway
         run: kubectl apply -f k8s/api-gateway-deployment.yaml --validate=false
+      - name: Wait for API Gateway rollout
+        run: kubectl rollout status deployment/api-gateway -n ecommerce --timeout=180s
       - name: Deploy API Gateway Service
         run: kubectl apply -f k8s/api-gateway-service.yaml --validate=false
       - name: Deploy Proxy Client
         run: kubectl apply -f k8s/proxy-client-deployment.yaml --validate=false
+      - name: Wait for Proxy Client rollout
+        run: kubectl rollout status deployment/proxy-client -n ecommerce --timeout=180s
       - name: Generate Release Notes
         run: |
           git log -1 --pretty=format:"%h - %s (%an, %ad)" > release-notes.txt

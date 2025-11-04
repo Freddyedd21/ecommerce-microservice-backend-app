@@ -1,8 +1,6 @@
 name: CI/CD - Core Services
 
 on:
-  push:
-    branches: [ dev, stage, master ]
   workflow_dispatch:
 
 jobs:
@@ -20,7 +18,13 @@ jobs:
         run: kubectl apply -f k8s/config-maps.yaml --validate=false
       - name: Deploy Zipkin
         run: kubectl apply -f k8s/zipkin-deployment.yaml --validate=false
+      - name: Wait for Zipkin rollout
+        run: kubectl rollout status deployment/zipkin -n ecommerce --timeout=180s
       - name: Deploy Cloud Config
         run: kubectl apply -f k8s/cloud-config-deployment.yaml --validate=false
+      - name: Wait for Cloud Config rollout
+        run: kubectl rollout status deployment/cloud-config -n ecommerce --timeout=300s
       - name: Deploy Service Discovery
         run: kubectl apply -f k8s/service-discovery-deployment.yaml --validate=false
+      - name: Wait for Service Discovery rollout
+        run: kubectl rollout status deployment/service-discovery -n ecommerce --timeout=180s

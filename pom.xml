@@ -150,6 +150,7 @@
 								<configuration>
 									<includes>
 										<include>**/MinikubeServiceCommunicationTest.java</include>
+										<include>**/*E2ETest.java</include>
 									</includes>
 									<environmentVariables>
 										<PRODUCT_SERVICE_BASE_URL>http://127.0.0.1:18500/product-service</PRODUCT_SERVICE_BASE_URL>
@@ -158,6 +159,7 @@
 										<FAVOURITE_SERVICE_BASE_URL>http://127.0.0.1:18800/favourite-service</FAVOURITE_SERVICE_BASE_URL>
 										<SHIPPING_SERVICE_BASE_URL>http://127.0.0.1:18600/shipping-service</SHIPPING_SERVICE_BASE_URL>
 										<PAYMENT_SERVICE_BASE_URL>http://127.0.0.1:18400/payment-service</PAYMENT_SERVICE_BASE_URL>
+										<API_GATEWAY_BASE_URL>http://127.0.0.1:18080</API_GATEWAY_BASE_URL>
 									</environmentVariables>
 								</configuration>
 							</execution>
