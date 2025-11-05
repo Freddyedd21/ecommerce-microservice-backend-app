@@ -57,4 +57,4 @@ jobs:
           $content = $content -replace 'namespace: ecommerce', "namespace: ${{ env.KUBE_NAMESPACE }}"
           $content | kubectl apply -f - --validate=false
           kubectl set image deployment/${{ env.SERVICE }} ${{ env.SERVICE }}=$env:IMAGE_TAG -n ${{ env.KUBE_NAMESPACE }}
-          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.KUBE_NAMESPACE }} --timeout=300s
+          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.KUBE_NAMESPACE }} --timeout=600s
