@@ -4,6 +4,7 @@ metadata:
   name: user-service
   namespace: ecommerce
 spec:
+  progressDeadlineSeconds: 900
   replicas: 1
   selector:
     matchLabels:
