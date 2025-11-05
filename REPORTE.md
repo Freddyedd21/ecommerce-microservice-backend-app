@@ -46,9 +46,8 @@
 - Se crearon dos workflows principales en `.github/workflows/`:
   - `core-services-pipeline.yml`: Despliega los servicios centrales (Zipkin, Cloud Config, Service Discovery) en el clúster de Kubernetes usando los manifiestos en `k8s/`.
   - `api-gateway-pipeline.yml`: Compila, construye y publica la imagen Docker del API Gateway, y luego la despliega en Kubernetes.
-- Ambos workflows se dejaron ahora solo para ejecución manual (`workflow_dispatch`) para evitar redeploys accidentales al hacer `git push`. El pipeline del gateway sigue encadenado al de core mediante `workflow_run` para conservar el orden cuando se lanzan manualmente.
-- El workflow de core despliega ahora en el orden Zipkin → Cloud Config → Service Discovery y espera a que cada `Deployment` quede listo con `kubectl rollout status` antes de avanzar. De este modo Eureka arranca una vez que el Config Server ya expone la configuración. El pipeline del gateway verifica a su vez que Eureka y Config Server estén sanos y espera la propagación de API Gateway y Proxy Client para cerrar el job con el clúster estable.
-- El workflow de servicios centrales debe ejecutarse primero para asegurar que Zipkin, Eureka y Config Server estén disponibles antes de desplegar el API Gateway y los microservicios de negocio.
+- Ambos workflows quedaron únicamente con el disparador manual (`workflow_dispatch`). Se desactivaron los eventos `push` y `workflow_run` para evitar despliegues automáticos cuando se hace `git push`; a partir de ahora se deben ejecutar desde la pestaña *Actions* siguiendo el orden core → gateway.
+- El workflow de core despliega en el orden Zipkin → Cloud Config → Service Discovery y espera a que cada `Deployment` quede listo con `kubectl rollout status` antes de avanzar. De este modo Eureka arranca una vez que el Config Server ya expone la configuración. El job del gateway aplica el propio deployment y proxy-client, verificando su rollout antes de finalizar.
 - Ambos workflows usan un runner self-hosted y requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` para autenticación y acceso al clúster.
 
 ![1761673447373](image/REPORTE/1761673447373.png)
@@ -169,8 +168,49 @@ Antes de lanzar el comando, asegurarse de tener vivos todos los `port-forward` l
 
 ![1762208725906](image/REPORTE/1762208725906.png)
 
+### Tutorial rápido: ejecutar la prueba de integración
+
+1. Abre los túneles necesarios (un terminal por puerto) siguiendo la tabla de la sección 9. Revisa que cada `curl` responda 200.
+2. Desde la raíz del repo ejecuta una compilación limpia del módulo raíz si vienes de un `clean` previo:
+  ```powershell
+  mvn --% -Pintegration -pl :ecommerce-microservice-backend -am compiler:testCompile
+  ```
+  Este paso recompila los tests en `src/test/java`.
+3. Lanza la suite completa (unitarias + integración + E2E) con:
+  ```powershell
+  mvn -Pintegration verify
+  ```
+4. Los reportes de Failsafe se generan en `target/failsafe-reports/` y los de Surefire en cada módulo (`<module>/target/surefire-reports/`).
+5. Ante un fallo de conectividad, revisa primero los `port-forward` y vuelve a ejecutar el comando.
+
 ## 11. Nuevas pruebas E2E orientadas al flujo de usuario
 
 - Se añadió el archivo `src/test/java/com/selimhorri/app/e2e/UserJourneyE2ETest.java` con cinco casos que validan escenarios de usuario extremo a extremo a través del API Gateway (catálogo de productos, detalle, favoritos enriquecidos, resumen de envíos y estado de pagos).
 - Para ejecutarlas es necesario abrir un túnel adicional hacia el gateway: `kubectl port-forward deployment/api-gateway -n ecommerce 18080:8080`. El plugin Failsafe expone esta URL a los tests mediante `API_GATEWAY_BASE_URL`.
 - Las pruebas se ejecutan junto con la suite de integración existente utilizando el mismo comando `mvn -Pintegration verify`. El reporte consolidado queda disponible en `target/failsafe-reports/`.
+- Se reforzó el test para entornos inestables: el `RestTemplate` ahora usa timeouts más generosos (30 s de conexión y 45 s de lectura) y reintenta hasta tres veces las llamadas al gateway antes de fallar, minimizando falsos positivos cuando los `port-forward` tardan en responder.
+
+
+![1762301114758](image/REPORTE/1762301114758.png)
+
+### Tutorial rápido: ejecutar solo las E2E
+
+1. Asegúrate de tener activos los `port-forward` hacia todos los servicios y, en especial, al API Gateway (`18080:8080`).
+2. Recompila las clases de test en caso de haber hecho `clean`:
+  ```powershell
+  mvn --% -Pintegration -pl :ecommerce-microservice-backend -am compiler:testCompile
+  ```
+3. Ejecuta únicamente el E2E filtrando por nombre y excluyendo la suite de Minikube:
+  ```powershell
+  mvn --% -Pintegration "-Dfailsafe.includes=**/UserJourneyE2ETest.java" "-Dfailsafe.excludes=**/MinikubeServiceCommunicationTest.java" verify
+  ```
+4. Observa en consola la traza `Running com.selimhorri.app.e2e.UserJourneyE2ETest` y verifica el archivo `target/failsafe-reports/TEST-com.selimhorri.app.e2e.UserJourneyE2ETest.xml`.
+5. Vuelve a `mvn -Pintegration verify` sin filtros para ejecutar ambas suites juntas.
+
+## 12. Pruebas de rendimiento con Locust
+
+- Se agregó la carpeta `load-testing/` con `locustfile.py`, que reproduce las mismas jornadas del E2E (catálogo, detalle, favoritos, envíos y pagos) para medir desempeño desde el API Gateway.
+- Cada tarea valida que las respuestas incluyan los campos clave (`collection`, `product`, `order`, etc.) y registra fallos si la API responde con estado inesperado o JSON inválido.
+- El archivo `load-testing/README.md` documenta los prerequisitos y comandos para ejecutar Locust de forma interactiva y headless, incluyendo ejemplos con exporte CSV/HTML.
+- Para evitar conflictos de entorno se recomienda usar `py -3.13 -m locust -f load-testing/locustfile.py` y mantener activos los `port-forward` hacia el gateway y los microservicios.
+- Se sugirió una estrategia escalonada para las pruebas: comenzar con 10 usuarios (ramp-up 2/s) y aumentar progresivamente a 25, 50, 75 usuarios monitoreando RPS, latencias P95/P99 y métricas de los pods (`kubectl top pod -n ecommerce`).
