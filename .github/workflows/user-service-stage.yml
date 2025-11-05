@@ -1,0 +1,60 @@
+name: Stage Deploy - User Service
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ stage ]
+
+env:
+  SERVICE: user-service
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/user-service
+  KUBE_NAMESPACE: ecommerce
+
+jobs:
+  build-test-deploy:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Run unit tests
+        run: .\mvnw.cmd -pl $env:SERVICE -am test
+
+      - name: Package service
+        run: .\mvnw.cmd -pl $env:SERVICE -am -DskipTests=false package
+
+      - name: Log in to Docker Hub
+        run: |
+          docker logout 2>$null
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Build Docker image
+        run: |
+          $tag = "${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          docker build -t $tag -f $env:SERVICE/Dockerfile .
+          echo "IMAGE_TAG=$tag" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Push Docker image
+        run: docker push $env:IMAGE_TAG
+
+      - name: Configure kubeconfig
+        run: |
+          $env:KUBECONFIG = "${{ secrets.KUBECONFIG }}"
+          echo "KUBECONFIG set"
+
+      - name: Deploy to stage namespace
+        run: |
+          $content = Get-Content k8s/${{ env.SERVICE }}-deployment.yaml -Raw
+          $content = $content -replace 'namespace: ecommerce', "namespace: ${{ env.KUBE_NAMESPACE }}"
+          $content | kubectl apply -f - --validate=false
+          kubectl set image deployment/${{ env.SERVICE }} ${{ env.SERVICE }}=$env:IMAGE_TAG -n ${{ env.KUBE_NAMESPACE }}
+          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.KUBE_NAMESPACE }} --timeout=300s

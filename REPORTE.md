@@ -49,6 +49,14 @@
 - Ambos workflows quedaron únicamente con el disparador manual (`workflow_dispatch`). Se desactivaron los eventos `push` y `workflow_run` para evitar despliegues automáticos cuando se hace `git push`; a partir de ahora se deben ejecutar desde la pestaña *Actions* siguiendo el orden core → gateway.
 - El workflow de core despliega en el orden Zipkin → Cloud Config → Service Discovery y espera a que cada `Deployment` quede listo con `kubectl rollout status` antes de avanzar. De este modo Eureka arranca una vez que el Config Server ya expone la configuración. El job del gateway aplica el propio deployment y proxy-client, verificando su rollout antes de finalizar.
 - Ambos workflows usan un runner self-hosted y requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` para autenticación y acceso al clúster.
+- Se añadieron pipelines específicos para entorno *stage* de los microservicios `product-service` y `user-service` (`product-service-stage.yml`, `user-service-stage.yml`). Cada pipeline:
+  1. Ejecuta las pruebas unitarias del módulo (`mvnw -pl <service> -am test`).
+  2. Empaqueta el servicio sin saltar pruebas.
+  3. Construye y publica una imagen con tag `SHA` en Docker Hub.
+  4. Aplica los manifiestos de Kubernetes ajustando el namespace a `ecommerce-stage` y fuerza la actualización del deployment con la nueva imagen.
+  5. Espera el `rollout` exitoso antes de terminar.
+- Estos pipelines se disparan de forma manual o con `push` a la rama `stage`. Requieren los secretos `DOCKER_USERNAME`, `DOCKER_PASSWORD` y `KUBECONFIG` del clúster.
+- Actualmente despliegan sobre el namespace `ecommerce` existente, por lo que comparten ConfigMaps/Secrets con el entorno ya configurado. Si más adelante decides aislar un entorno stage, basta con ajustar la variable `KUBE_NAMESPACE` en los workflows.
 
 ![1761673447373](image/REPORTE/1761673447373.png)
 
