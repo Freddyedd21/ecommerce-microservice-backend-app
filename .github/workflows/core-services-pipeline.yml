@@ -1,0 +1,30 @@
+name: CI/CD - Core Services
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_deploy_core:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Apply Namespace
+        run: kubectl apply -f k8s/namespace.yaml --validate=false
+      - name: Apply Config Maps
+        run: kubectl apply -f k8s/config-maps.yaml --validate=false
+      - name: Deploy Zipkin
+        run: kubectl apply -f k8s/zipkin-deployment.yaml --validate=false
+      - name: Wait for Zipkin rollout
+        run: kubectl rollout status deployment/zipkin -n ecommerce --timeout=180s
+      - name: Deploy Cloud Config
+        run: kubectl apply -f k8s/cloud-config-deployment.yaml --validate=false
+      - name: Wait for Cloud Config rollout
+        run: kubectl rollout status deployment/cloud-config -n ecommerce --timeout=300s
+      - name: Deploy Service Discovery
+        run: kubectl apply -f k8s/service-discovery-deployment.yaml --validate=false
+      - name: Wait for Service Discovery rollout
+        run: kubectl rollout status deployment/service-discovery -n ecommerce --timeout=180s

@@ -1,0 +1,35 @@
+
+name: CI/CD - Business Services
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build_deploy_business:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up KUBECONFIG
+        run: |
+          $env:KUBECONFIG = "${{ secrets.KUBECONFIG }}"
+      - name: Apply Namespace
+        run: kubectl apply -f k8s/namespace.yaml --validate=false
+      - name: Apply Config Maps
+        run: kubectl apply -f k8s/config-maps.yaml --validate=false
+      - name: Deploy Product Service
+        run: kubectl apply -f k8s/product-service-deployment.yaml --validate=false
+      - name: Deploy User Service
+        run: kubectl apply -f k8s/user-service-deployment.yaml --validate=false
+      - name: Deploy Favourite Service
+        run: kubectl apply -f k8s/favourite-service-deployment.yaml --validate=false
+      - name: Deploy Order Service
+        run: kubectl apply -f k8s/order-service-deployment.yaml --validate=false
+      - name: Deploy Payment Service
+        run: kubectl apply -f k8s/payment-service-deployment.yaml --validate=false
+      - name: Deploy Shipping Service
+        run: kubectl apply -f k8s/shipping-service-deployment.yaml --validate=false

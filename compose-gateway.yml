@@ -1,0 +1,49 @@
+version: '3'
+services:
+  api-gateway-container:
+    image: selimhorri/api-gateway-ecommerce-boot:0.1.0
+    ports:
+      - "8080:8080"
+    networks:
+      - microservices_network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://cloud-config-container:9296/
+      - SPRING_CLOUD_CONFIG_URI=http://cloud-config-container:9296
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+      - EUREKA_CLIENT_FETCH_REGISTRY=true
+      - EUREKA_CLIENT_ENABLED=true
+      - RIBBON_EUREKA_ENABLED=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - EUREKA_INSTANCE_HOSTNAME=api-gateway-container
+
+  proxy-client-container:
+    image: selimhorri/proxy-client-ecommerce-boot:0.1.0
+    ports:
+      - "8900:8900"
+    networks:
+      - microservices_network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://cloud-config-container:9296/
+      - SPRING_CLOUD_CONFIG_URI=http://cloud-config-container:9296
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://service-discovery-container:8761/eureka/
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+      - EUREKA_CLIENT_FETCH_REGISTRY=true
+      - EUREKA_CLIENT_ENABLED=true
+      - RIBBON_EUREKA_ENABLED=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - EUREKA_INSTANCE_HOSTNAME=proxy-client-container
+
+networks:
+  microservices_network:
+    external: true

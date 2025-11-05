@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin
+  template:
+    metadata:
+      labels:
+        app: zipkin
+    spec:
+      containers:
+      - name: zipkin
+        image: openzipkin/zipkin:latest
+        ports:
+        - containerPort: 9411
+        env:
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://cloud-config-service:9296/"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: "http://service-discovery-service:8761/eureka/"
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: "http://service-discovery-service:8761/eureka/"
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          value: "http://service-discovery-service:8761/eureka/"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-Deureka.client.service-url.defaultZone=http://service-discovery-service:8761/eureka/"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: zipkin
+  ports:
+    - protocol: TCP
+      port: 9411
+      targetPort: 9411
+  type: ClusterIP

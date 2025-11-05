@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favourite-service-deployment
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: favourite-service
+  template:
+    metadata:
+      labels:
+        app: favourite-service
+    spec:
+      containers:
+      - name: favourite-service
+        image: selimhorri/favourite-service-ecommerce-boot:0.1.0
+        ports:
+        - containerPort: 8800
+        env:
+        - name: SPRING_CLOUD_CONFIG_NAME
+          value: "favourite-service"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "dev"
+        - name: SPRING_ZIPKIN_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: zipkin-config
+              key: ZIPKIN_BASE_URL
+        - name: SPRING_CONFIG_IMPORT
+          value: "optional:configserver:http://cloud-config-service:9296/"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://cloud-config-service:9296"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eureka-config
+              key: EUREKA_SERVER_URL
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+          value: "true"
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: "true"
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: "update"
+        - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+          value: "true"
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: "favourite-service-container"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: favourite-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: favourite-service
+  ports:
+    - protocol: TCP
+      port: 8800
+      targetPort: 8800
+  type: ClusterIP

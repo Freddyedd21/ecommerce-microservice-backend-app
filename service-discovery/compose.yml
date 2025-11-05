@@ -1,12 +1,21 @@
 
+
 version: '3'
 services:
   service-discovery-container:
     image: selimhorri/service-discovery-ecommerce-boot:0.1.0
     ports:
-      - 8761:8761
+      - "8761:8761"
+    networks:
+      - microservices_network
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://cloud-config-container:9296/
+
+networks:
+  microservices_network:
+    external: true
 
 
 
